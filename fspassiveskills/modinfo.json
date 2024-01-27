@@ -1,0 +1,12 @@
+{
+    "type": "code",
+    "modid": "fspassiveskills",
+    "name": "FS Passive Skills",
+    "side": "universal",
+    "description" : "A creatures modpack made by the Feverstone Modding Team",
+    "authors": ["Feverstone", "Ahrondus and Verlia"],
+    "version": "1.0.0",
+    "dependencies": { 
+        "game": "1.19.0"
+    }
+}
