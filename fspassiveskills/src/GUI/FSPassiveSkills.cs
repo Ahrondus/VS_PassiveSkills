@@ -1,10 +1,6 @@
-using System;
 using Vintagestory.API.Common;
 using Vintagestory.API.Client;
-using Vintagestory.API.Common.Entities;
-using Vintagestory.API.Config;
-using Vintagestory.API.Datastructures;
-using Vintagestory.GameContent;
+using System;
 
 namespace FSPassiveSkills
 {
@@ -18,18 +14,52 @@ namespace FSPassiveSkills
 		}
 		private void SetupDialog()
 		{
-			ElementBounds dialogBounds = ElementStdBounds.AutosizedMainDialog.WithAlignment(EnumDialogArea.CenterMiddle);
+			int titlebar = 31;
+			ElementBounds window = ElementStdBounds.AutosizedMainDialog.WithAlignment(EnumDialogArea.CenterMiddle);
+			ElementBounds dialogBounds = ElementBounds.Fixed(400, 820);
+			ElementBounds dialog = ElementBounds.Fill.WithFixedPadding(0);
 
-			ElementBounds textBounds = ElementBounds.Fixed(0,40,300,300);
+			ElementBounds borderLeft = ElementBounds.Fixed(10,10+titlebar, 10, 770);
+			ElementBounds borderRight = ElementBounds.Fixed(380,10+titlebar, 10, 770);
+			ElementBounds borderTop = ElementBounds.Fixed(10,10+titlebar, 380, 10);
+			ElementBounds borderBottom = ElementBounds.Fixed(10,770+titlebar, 380, 10);
 
-			ElementBounds bgBounds = ElementBounds.Fill.WithFixedPadding(GuiStyle.ElementToDialogPadding);
-			bgBounds.BothSizing = ElementSizing.FitToChildren;
-			bgBounds.WithChildren(textBounds);
+			ElementBounds diggingInset = ElementBounds.Fixed(30,30+titlebar, 80, 40);
+			ElementBounds diggingTextBounds = ElementBounds.Fixed(37, 37+titlebar, 67, 23);
 
-			SingleComposer = capi.Gui.CreateCompo("MyFirstDialogBox", dialogBounds)
-				.AddShadedDialogBG(bgBounds)
-				.AddDialogTitleBar("Title Bar, Nice!", OnTitleBarCloseClicked)
-				.AddStaticText("This is a placeholder at the center of your screen.", CairoFont.WhiteDetailText(), textBounds)
+			ElementBounds textInset = ElementBounds.Fixed(133,30+titlebar, 125, 104);
+			ElementBounds textBounds = ElementBounds.Fixed(135, 32+titlebar, 121, 100);
+
+			dialog.BothSizing = ElementSizing.FitToChildren;
+			dialog.WithChildren(new ElementBounds[]
+			{
+				dialogBounds,
+				borderLeft,
+				borderRight,
+				borderTop,
+				borderBottom,
+				diggingInset,
+				diggingTextBounds,
+				textInset,
+				textBounds
+			});
+
+			this.SingleComposer = capi.Gui.CreateCompo("testDialog", window)
+				.AddShadedDialogBG(dialog, true, 5)
+				.AddDialogTitleBar("FS Passive Skills", OnTitleBarCloseClicked, null, null)
+				.BeginChildElements(dialog)
+				
+				.AddInset(borderLeft, 2, 0.85f)
+				.AddInset(borderRight, 2, 0.85f)
+				.AddInset(borderTop, 2, 0.85f)
+				.AddInset(borderBottom, 2, 0.85f)
+
+				.AddInset(diggingInset, -2, 0.85f)
+				.AddStaticText("Digging", CairoFont.WhiteSmallishText(), diggingTextBounds)
+
+				.AddInset(textInset, 2, 0.85f)
+				.AddStaticText("Test Text", CairoFont.WhiteSmallishText(), textBounds)
+				.EndChildElements()
 				.Compose();
 		}
 
